@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Recommendation System (ROA Optimized)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f9f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      width: 85%;
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    h2 {
+      color: #2e7d32;
+    }
+
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      display: inline-block;
+    }
+
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 150px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #1b5e20;
+    }
+
+    .card-custom {
+      margin-top: 30px;
+      padding: 20px;
+      background: #e8f5e9;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .recommend-text {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .season-text {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .metrics {
+      background: #c8e6c9;
+      padding: 10px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .metrics p {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #2e7d32;
+    }
+
+    .footer-note {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .crop-image {
+      width: 220px;
+      height: 220px;
+      border-radius: 10px;
+      margin-top: 15px;
+      object-fit: cover;
+      border: 2px solid #2e7d32;
+    }
+
+    #iotResult {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #1b5e20;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>🌱 Crop Recommendation System</h2>
+    <h4>Powered by <b>Remora Optimization Algorithm (ROA)</b></h4>
+
+    <!-- Manual Input Form -->
+    <form id="cropForm" action="/predict" method="post">
+      <input type="number" id="N" name="N" placeholder="Nitrogen" required>
+      <input type="number" id="P" name="P" placeholder="Phosphorus" required>
+      <input type="number" id="K" name="K" placeholder="Potassium" required><br>
+      <input type="number" id="temperature" name="temperature" placeholder="Temperature" step="0.01" required>
+      <input type="number" id="humidity" name="humidity" placeholder="Humidity" step="0.01" required>
+      <input type="number" id="ph" name="ph" placeholder="pH Value" step="0.01" required><br>
+      <input type="number" id="rainfall" name="rainfall" placeholder="Rainfall" step="0.01" required><br>
+      <button type="submit">Predict Crop</button>
+    </form>
+
+    <div class="card-custom">
+  <h4>🌾 Prediction Result</h4>
+  <div class="recommend-text">Recommended Crop: {{ crop }}</div>
+  <div class="season-text">Season: {{ season }}</div>
+  <p>{{ message }}</p>
+
+  {% if crop %}
+  <div style="margin-top: 20px;">
+    <img src="{{ url_for('static', filename='crops/' + crop.lower() + '.jpg') }}"
+         alt="{{ crop }} image"
+         style="width: 200px; height: 200px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+  </div>
+  {% endif %}
+</div>
+
+
+    <!-- IoT Data Input Form -->
+    <div class="card-custom">
+      <h4>🌐 IoT Sensor Data Simulation</h4>
+      <form id="iotForm">
+        <input type="number" id="iotN" name="N" placeholder="Nitrogen" required>
+        <input type="number" id="iotP" name="P" placeholder="Phosphorus" required>
+        <input type="number" id="iotK" name="K" placeholder="Potassium" required><br>
+        <input type="number" id="iotTemp" name="temperature" placeholder="Temperature" step="0.01" required>
+        <input type="number" id="iotHumidity" name="humidity" placeholder="Humidity" step="0.01" required>
+        <input type="number" id="iotPh" name="ph" placeholder="pH Value" step="0.01" required><br>
+        <input type="number" id="iotRainfall" name="rainfall" placeholder="Rainfall" step="0.01" required><br>
+        <button type="button" id="iotPredictBtn">Predict Crop (IoT)</button>
+      </form>
+
+      <div id="iotResult"></div>
+    </div>
+
+    <div class="footer-note">
+      <p>Developed for research on <b>Crop Recommendation Optimization using Remora Algorithm</b> 🌾</p>
+    </div>
+  </div>
+<script>
+  // Function to simulate IoT sensor data
+  function getSimulatedSensorData() {
+    return {
+      N: Math.floor(Math.random() * 100),
+      P: Math.floor(Math.random() * 100),
+      K: Math.floor(Math.random() * 100),
+      temperature: (20 + Math.random() * 10).toFixed(2),
+      humidity: (40 + Math.random() * 30).toFixed(2),
+      ph: (5 + Math.random() * 2).toFixed(2),
+      rainfall: (50 + Math.random() * 100).toFixed(2),
+    };
+  }
+
+  // Auto-fill IoT form every 15 seconds
+  setInterval(() => {
+    const data = getSimulatedSensorData();
+    document.getElementById("iotN").value = data.N;
+    document.getElementById("iotP").value = data.P;
+    document.getElementById("iotK").value = data.K;
+    document.getElementById("iotTemp").value = data.temperature;
+    document.getElementById("iotHumidity").value = data.humidity;
+    document.getElementById("iotPh").value = data.ph;
+    document.getElementById("iotRainfall").value = data.rainfall;
+  }, 15000);
+
+  // IoT prediction button
+  document.getElementById("iotPredictBtn").addEventListener("click", async () => {
+    const data = {
+      N: parseFloat(document.getElementById("iotN").value),
+      P: parseFloat(document.getElementById("iotP").value),
+      K: parseFloat(document.getElementById("iotK").value),
+      temperature: parseFloat(document.getElementById("iotTemp").value),
+      humidity: parseFloat(document.getElementById("iotHumidity").value),
+      ph: parseFloat(document.getElementById("iotPh").value),
+      rainfall: parseFloat(document.getElementById("iotRainfall").value),
+    };
+
+    try {
+      const response = await fetch("/iot_predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await response.json();
+
+      // Update result text
+      const iotResultDiv = document.getElementById("iotResult");
+      iotResultDiv.innerHTML =
+        "🌾 IoT Prediction: " + result.crop + " | Season: " + result.season;
+
+      // Remove previous image if exists
+      const oldImg = document.getElementById("iotCropImg");
+      if (oldImg) oldImg.remove();
+
+      // Add crop image dynamically
+      if (result.crop) {
+        const img = document.createElement("img");
+        img.src = "/static/crops/" + result.crop.toLowerCase() + ".jpg"; // Make sure this path is correct
+        img.alt = result.crop + " image";
+        img.style.width = "200px";
+        img.style.height = "200px";
+        img.style.borderRadius = "10px";
+        img.style.marginTop = "10px";
+        img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+        img.id = "iotCropImg";
+        iotResultDiv.appendChild(img);
+      }
+
+    } catch (err) {
+      console.error("Error predicting IoT data:", err);
+    }
+  });
+</script>
+
+</body>
+
+</html>

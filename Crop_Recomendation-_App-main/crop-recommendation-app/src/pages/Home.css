@@ -1,0 +1,144 @@
+
+ .home {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding-top: 100px;
+}
+
+.background-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+  transition: background-image 1s ease-in-out;
+  animation: zoomSlide 20s infinite alternate;
+}
+
+@keyframes zoomSlide {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.hero {
+  height: calc(100vh - 80px);
+  padding-top: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3rem;
+  border-radius: 20px;
+  animation: fadeIn 2s ease-in;
+}
+
+.overlay h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #ffd700;
+}
+
+.overlay p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.overlay button {
+  background: #ffd700;
+  color: #215c36;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.overlay button:hover {
+  background: #ffdb4d;
+  transform: scale(1.05);
+  color: #215c36;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+footer {
+  background: linear-gradient(to right, #1e452f, #2c6e49);
+  padding: 2rem 1rem;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  gap: 2rem;
+  text-align: left;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  color: #ffd700;
+  margin-bottom: 0.8rem;
+  font-size: 1.2rem;
+}
+
+.footer-section p, .social-icons span {
+  margin: 0.3rem 0;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-section p:hover,
+.social-icons span:hover {
+  color: #ffcf33;
+  transform: translateX(5px);
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  border-top: 1px solid #ffffff33;
+  padding-top: 1rem;
+  color: #ccc;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
